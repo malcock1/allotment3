@@ -4,7 +4,7 @@
   "metadata": {
     "name": "allotment3",
     "annotations": {
-      "openshift.io/display-name": "Django + PostgreSQL (Ephemeral)",
+      "openshift.io/display-name": "Allotment3 non-persistant",
       "description": "An example Django application with a PostgreSQL database. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/django-ex/blob/master/README.md.\n\nWARNING: Any data stored will be lost upon pod destruction. Only use this template for testing.",
       "tags": "quickstart,python,django",
       "iconClass": "icon-python",

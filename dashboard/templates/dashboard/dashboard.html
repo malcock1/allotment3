@@ -1,0 +1,54 @@
+{% extends "allotment/base.html" %}
+{% load common_helpers static %}
+
+{% block page_classes %}
+{% endblock page_classes %}
+	
+{% block content %}
+
+	<!--div class="container">
+		<h3>Existing plant species</h3>
+	</div-->
+	<div class="row">
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<div class="card">
+				<div class="card-header">Plants</div>
+				<div class="card-body">You have {{plant_count}} plants</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<div class="card">
+				<div class="card-header">This month</div>
+				<div class="card-body">
+					{% if month_tasks %}
+						<ul>
+						{% for task_name in month_tasks %}
+							<li>
+							{% with month_tasks|get_value:task_name as tasks %}
+								{{task_name}}:
+								{% for plant_task in tasks %}
+									{{plant_task}}									    	
+								{% endfor %}
+							{% endwith %}
+							</li>
+						{% endfor %}
+						</ul>
+					{% else %}
+						<p>Nothing to do this month!</p>
+						<p>Why not look for some plants in the <a href="{% url 'plant_species_home' %}">catalogue</a>?</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<div class="card">
+				<div class="card-header">Permaculture</div>
+				<div class="card-body">
+					<img src="{% static principle %}">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+{% endblock content %}

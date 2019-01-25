@@ -1,0 +1,173 @@
+{% extends "allotment/base.html" %}
+{% load static %}
+
+{% block content %}
+    <script type="text/javascript" src="{% static "js/snap.svg.js" %}"/></script>
+    <script type="text/javascript" src="{% static "js/snap.svg.freetransform.js" %}"/></script>
+        <style>
+            svg { width: 1200px; height: 1100px; }
+        </style>
+        <svg id="drawing">
+        </svg>
+<script>
+    // MAIN
+    var s = Snap('#drawing');
+
+    // MENU
+    var g = s.g();
+    var menu_crate = g.image("{% static "images/crate.svg" %}", 800,10,380,460);
+    var menu_title = g.text(920,70, "Toolbox").attr({ fontWeight: 'bold', fontSize: '48px' });
+    var menu_add_bed = g.text(870,120, "- Add Bed").attr({ fontWeight: 'bold', fontSize: '24px' });
+    var menu_add_bush = g.text(870,160, "- Add Bush").attr({ fontWeight: 'bold', fontSize: '24px' });
+    var menu_add_cabbage = g.image("{% static 'images/cabbage.svg' %}", 900,200, 48, 48);
+    var menu_add_corn = g.image("{% static 'images/corn.svg' %}", 1020,200, 48, 48);
+    var menu_add_beetroot = g.image("{% static 'images/beetroot.svg' %}", 900, 280, 48, 48);
+    var menu_add_bean = g.image("{% static 'images/beans.svg' %}", 1020, 280, 48, 48);
+    var menu_add_carrot = g.image("{% static 'images/carrot.svg' %}", 900,320, 48, 48);
+    var menu_save = g.text(870,500, "- Save").attr({ fontWeight: 'bold', fontSize: '24px' });
+
+    drawGround();
+    loadDesign(17);
+
+    var beds = s.group();
+    var bushes = s.group();
+    var vegetables = s.group();
+    var previous = s.group();
+
+    // BEDS
+    menu_add_bed.click( function() { draw(beds, 'bed', 820, 130, 50) });
+    menu_add_bush.click( function () { draw(bushes, 'bush', 820, 130, 50) });
+    menu_add_cabbage.click( function () { draw(vegetables, 'cabbage', 820, 130, 50) });
+    menu_add_corn.click( function () { draw(vegetables, 'corn', 820, 130, 50) });
+    menu_add_beetroot.click( function () { draw(vegetables, 'beetroot', 820, 130, 50) });
+    menu_add_bean.click( function () { draw(vegetables, 'beans', 820, 130, 50) });
+    menu_add_carrot.click( function () { draw(vegetables, 'carrot', 820, 130, 50) });
+    menu_save.click( saveDesign  );
+    
+    // End
+
+
+    // GROUND
+    function drawGround() {
+        var ground = s.rect(10,10,780,1080,20,20).attr({ fill: '#beda55', strokeWidth: 5 });
+        var ground_pattern = s.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({
+                fill: "none",
+                stroke: "#bada55",
+                strokeWidth: 5
+        });
+        ground_pattern = ground_pattern.pattern(0, 0, 10, 10);
+        ground.attr({fill: ground_pattern});
+        // End
+
+        // Draw the railway sleeper at the bottom
+        var sleeper = s.rect(10, 1070, 780, 20, 5, 5).attr({ fill:'#943126' })
+    }
+    // End
+
+    // DRAW
+    function draw(group, type, x1, y1, length) {
+        if (type == 'bed') {
+            var item = s.rect(820, 59,100,100,5,5).attr({ fill: '#641e16', stroke: '#943126', strokeWidth: 5 })
+            item.addClass(type);
+
+        }
+        else if (type == 'bush') {
+            var item = s.circle(x1 + 10 - Math.floor(Math.random() * 20), y1 + 10 - Math.floor(Math.random() * 20), Math.random() * length / 1.3);
+            item.addClass(type);
+
+        }
+        else {
+            var item = g.image("/static/images/" + type + ".svg", x1, y1, 32, 32).attr({
+                stroke: "#00ff00",
+                fill: "#008000",
+            });
+            item.addClass('vegetable');
+        }
+
+        item.dblclick( function() {
+            if( item.data('ftStatus') ){
+                ft.hideHandles();
+                item.data('ftStatus',0);
+            } else {
+                ft.showHandles();
+                item.data('ftStatus',1);
+            }
+        });
+        group.addClass('item');
+        group.append(item);
+        var ft = s.freeTransform(item, { snap: { rotate: 1 }, size: 8, draw: 'bbox'  });
+        group.attr({ cursor: 'move' });
+        ft.apply();
+        group.data('ftStatus', 1);
+    }
+
+    function saveDesign() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "{% url 'designs_add' %}", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("X-CSRFToken", "{{ csrf_token }}" );
+        var svg = beds.outerSVG() + vegetables.outerSVG() + bushes.outerSVG() + previous.outerSVG();
+        xhttp.send('svg=' + encodeURIComponent(svg));
+    }
+
+    function loadDesign(design_id) {
+        Snap.load("/designs/edit/" + design_id, function(frag) {
+            s.append(frag);
+
+            var allG = s.selectAll('.item');
+            var b=s.selectAll('.bed');
+            var c= s.selectAll('.vegetable');
+            var v=s.selectAll('.bush');
+            var p=s.selectAll('.previous');
+
+            b.forEach(function(el) {
+                var ft = s.freeTransform( el, { snap: { rotate: 1 }, size: 8, draw: 'bbox'  });
+                ft.hideHandles();
+                el.data('ftStatus',0);
+                el.dblclick( function() {
+                    if( el.data('ftStatus' ) ) {
+                        ft.hideHandles();
+                        el.data('ftStatus',0);
+                    } else {
+                        ft.showHandles();
+                        el.data('ftStatus',1);
+                    }
+                });
+            });
+            c.forEach(function(el) {
+                var ft = s.freeTransform( el, { snap: { rotate: 1 }, size: 8, draw: 'bbox'  });
+                ft.hideHandles();
+                el.data('ftStatus',0);
+                el.dblclick( function() {
+                    if( el.data('ftStatus' ) ) {
+                        ft.hideHandles();
+                        el.data('ftStatus',0);
+                    } else {
+                        ft.showHandles();
+                        el.data('ftStatus',1);
+                    }
+                });
+            });
+            v.forEach(function(el) {
+                var ft = s.freeTransform( el, { snap: { rotate: 1 }, size: 8, draw: 'bbox'  });
+                ft.hideHandles();
+                el.data('ftStatus',0);
+                el.dblclick( function() {
+                    if( el.data('ftStatus' ) ) {
+                        ft.hideHandles();
+                        el.data('ftStatus',0);
+                    } else {
+                        ft.showHandles();
+                        el.data('ftStatus',1);
+                    }
+                });
+            });
+            beds.add(b);
+            bushes.add(v);
+            vegetables.add(c);
+        });
+    }
+
+</script>
+
+{% endblock %}

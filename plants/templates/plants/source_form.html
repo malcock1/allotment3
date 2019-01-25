@@ -1,0 +1,13 @@
+{% extends "allotment/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+	<div class="col-sm">
+		<form method="POST" action="">
+			{% csrf_token %}
+                {% bootstrap_form form %}
+			    <button type="submit" class="btn btn-primary">Submit</button>
+			    <a class="btn btn-secondary" href={% if form.instance %}"{% url 'plant_source_list' %}"{% else %}"{% url 'plant_source_view' form.instance.id %}"{% endif %}>Cancel</a>
+		</form>
+	</div>
+{% endblock content %}

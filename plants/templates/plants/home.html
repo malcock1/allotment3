@@ -1,0 +1,41 @@
+{% extends "allotment/base.html" %}
+
+{% block content %}
+
+	<!--div class="container">
+		<h3>Existing plant species</h3>
+	</div-->
+	<div class="container">
+		{% for family in families %}
+			<h4>{{family}}</h4>
+			<div class="row">
+				{% with family.species.all as species %}
+				{% for specie in species %}
+					<div class="col-sm-4 col-md-3">
+						<div class="card">
+						  <div class="card-body">
+						    <h5 class="card-title">
+								<a href="{% url 'plant_species_view' specie.pk %}">{{specie.name}}</a>
+						    </h5>
+						    {% if specie.latin_name %}
+						    	<p class="card-text"><em>{{specie.latin_name}}</em></p>
+						    {% endif %}
+						    {% if specie.notes %}
+						    	<p class="card-text">{{specie.notes}}</p>
+						    {% endif %}
+						  </div>
+						  <ul class="list-group list-group-flush">
+						    <li class="list-group-item">{{specie.plants.count}} plants</li>
+						  </ul>
+						</div>
+					</div>
+				{% endfor %}
+				{% endwith %}
+			</div>
+		{% empty %}
+			<p>No plants yet!</p>
+			<p>Why not <a href="{% url 'plant_species_add' %}">add one</a>?</p>
+		{% endfor %}
+	</div>
+
+{% endblock content %}

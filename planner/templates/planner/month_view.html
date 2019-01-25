@@ -1,0 +1,35 @@
+{% extends "allotment/base.html" %}
+
+{% block extra_styling %}
+	.plant_out {
+		background-color: green;
+	}
+	.seed_indoors {
+		cyan;
+	}
+	.seed_outdoors {
+		orange;
+	}
+	.harvest {
+		background-color: purple;
+	}
+{% endblock extra_styling %}
+	
+{% block content %}
+
+	<div class="container">
+		<table>
+			<tr>
+				
+			{% for day in days_in_month %}
+				<td>{{forloop.counter}}</td>
+				{% if forloop.counter|divisibleby:7 %}
+					</tr><tr>
+				{% endif %}
+			{% endfor %}
+			
+			</tr>
+		</table>
+	</div>
+
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends "allotment/base.html" %}
+
+{% block content %}
+	<div class="row">
+		
+		<div class="col-md-10 col-sm-12">
+			<div class="card">
+
+			  <img class="card-img-top" src="https://s3.amazonaws.com/finecooking.s3.tauntonclud.com/app/uploads/2017/04/24172502/ING-yellow-onions-main.jpg" alt="Card image cap">
+			  <div class="card-body">
+			    <h5 class="card-title">
+					<a href="{% url 'plant_species_view' species.pk %}">{{species}}</a>
+			    </h5>
+			    {% if species.notes %}
+			    	<p class="card-text">{{species.notes}}</p>
+			    {% endif %}
+			  </div>
+			  <ul class="list-group list-group-flush">
+			    <li class="list-group-item">{{species.annual_str}}</li>
+			    <li class="list-group-item">{{species.dimensions_str|default_if_none:'No dimensions entered'}}</li>
+			    <li class="list-group-item">{% if species.families %}{% for fam in species.families.all %}{{fam}}{% endfor %}{% else %}No families entered{% endif %}</li>
+			  </ul>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-12">
+			<div class="btn-group" role="group" aria-label="Basic example">
+			  <a type="button" class="btn btn-secondary" href="{% url 'plant_species_edit' species.id%}">
+			  		<i class="fas fa-pen-alt"></i> 
+			  </a>
+			  <a type="button" class="btn btn-secondary" href="{% url 'plant_species_delete' species.id%}">
+		  			<i class="fas fa-trash"></i> 
+			  </a>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock content %}

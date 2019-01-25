@@ -1,0 +1,39 @@
+{% extends "allotment/base.html" %}
+{% load design_tags %}
+
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm">
+            <h3>Allotment design: {{ design.name }}</h3>
+            <small class="text-muted">{{ design.description }}</small>
+            <table>
+                <thead>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th>Number of beds</th>
+                </thead>
+                </tbody>
+                <tr>
+                    <td>{{ design.width }}</td>
+                    <td>{{ design.height}}</td>
+                    <td>{{ design.beds.count}}</td>
+                </tr>
+                </tbody>
+            </table>
+		</div>
+	</div>
+	<div class="row">
+            {% for y in design.height|times %}
+                <div class="col">
+                    {% for x in design.width|times %}
+                        <div id="x_{{x}}_y_{{y}}" style="border-style: solid">{{x}}, {{y}}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+	</div>
+</div>
+
+{% endblock content %}

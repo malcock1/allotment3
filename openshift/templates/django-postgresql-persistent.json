@@ -2,7 +2,7 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "django-psql-persistent",
+    "name": "allotment-persistent",
     "annotations": {
       "openshift.io/display-name": "Allotment3 persistent",
       "description": "An example Django application with a PostgreSQL database. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/django-ex/blob/master/README.md.",
@@ -17,8 +17,8 @@
   },
   "message": "The following service(s) have been created in your project: ${NAME}, ${DATABASE_SERVICE_NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/sclorg/django-ex/blob/master/README.md.",
   "labels": {
-      "template": "django-psql-persistent",
-      "app": "django-psql-persistent"
+      "template": "allotment3",
+      "app": "allotment3"
   },
   "objects": [
     {
@@ -160,7 +160,7 @@
             "imageChangeParams": {
               "automatic": true,
               "containerNames": [
-                "django-psql-persistent"
+                "allotment3-persistent"
               ],
               "from": {
                 "kind": "ImageStreamTag",
@@ -186,7 +186,7 @@
           "spec": {
             "containers": [
               {
-                "name": "django-psql-persistent",
+                "name": "allotment3-persistent",
                 "image": " ",
                 "ports": [
                   {
@@ -428,7 +428,7 @@
       "displayName": "Name",
       "description": "The name assigned to all of the frontend objects defined in this template.",
       "required": true,
-      "value": "django-psql-persistent"
+      "value": "allotment3-persistent"
     },
     {
       "name": "NAMESPACE",

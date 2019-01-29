@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from health_check import health
+from project.healthcheck import health
 
 import plants, planner, designs
 
@@ -14,9 +14,7 @@ urlpatterns = [
     # url(r'^$', 'project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^$', index),
     url(r'^admin/', admin.site.urls),
-
 
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^/$', dashboard, name='home'),

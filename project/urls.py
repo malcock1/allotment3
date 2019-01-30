@@ -16,7 +16,7 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 
-    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^$', include('django.contrib.auth.urls')),
     url(r'^/$', dashboard, name='home'),
     url(r'^health$', health),
     url(r'^sign-up/$', signup, name='signup'),

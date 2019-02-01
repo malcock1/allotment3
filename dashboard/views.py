@@ -6,7 +6,10 @@ from django.shortcuts import render
 from planner.models import Month
 from plants.models import Plant, PlantSpecies
 
+import os
+
 def dashboard(request):
+        name = os.getenv('WHATSMYNAME')
 	month = Month.objects.get(pk=datetime.now().month)
 	month_tasks = {
 		'Seed indoors': month.plants_to_seed_indoors.all().values_list('name', flat=True),
@@ -16,6 +19,7 @@ def dashboard(request):
 	}
 	month_tasks_tidy = {k:(month_tasks[k]) for k in month_tasks if month_tasks[k]}
 	context = {
+                'name': name,
 		'page_title': "Dashboard",
 		'plant_count': Plant.objects.count(),
 		'month_tasks': month_tasks_tidy,
